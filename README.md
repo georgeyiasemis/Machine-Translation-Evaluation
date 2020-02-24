@@ -7,7 +7,17 @@ This task will be referred to as Machine Translation Evaluation (MTE).
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local 
+machine for development and testing purposes. See deployment for notes on how to deploy
+the project on a live system.
+
+#Run pipeline
+
+Below are intructions of how to run the pipeline (we do not create the embeddings from scratch in this format. If you want to create the embeddings see the Get Embeddings format):
+Download the whole directory 
+Install the Prerequisites
+ru
+ 
 
 ### Prerequisites
 
@@ -22,7 +32,7 @@ numpy
 nltk
 ```
 
-### Embeddings Example 
+### Get Embeddings Example 
 
 How to get embeddings for:
 ```
@@ -81,8 +91,8 @@ embeddings_max, embeddings_mean = english_encoder.get_batch_embedding(
 
 ## Authors
 
-* **George Yiasemis** - *CID:*
-* **Christos Seas ** - *CID:*
-* **Dhruva Storz** - *CID:*
+* **George Yiasemis** - *CID:11008587*
+* **Christos Seas ** - *CID:01836251*
+* **Dhruva Storz** - *CID:01807283*
 
 
