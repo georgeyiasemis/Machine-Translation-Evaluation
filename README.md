@@ -43,13 +43,26 @@ Create an encoder:
 import Embedding from embedding
 
 english_encoder = Embedding('en')
+#Loading English BERT tokenizer...
+
+#Loading English BERT Model...
 ```
 
 Get the embeddings:
 
 ```
-batch_size = 2
-embeddings = english_encoder.get_batch_embedding(data, batch_size = batch_size)
+batch_size = 5
+embeddings_max, embeddings_mean = english_encoder.get_batch_embedding(
+                                data, batch_size = batch_size)
+#Processing batch 1...
+#Getting embedding for batch 1...
+
+#Processing batch 2...
+#Getting embedding for batch 2...
+
+#DONE!
+#Embedding size is (10,768)
+
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
