@@ -3,22 +3,24 @@ import torch
 from embedding import Embedding 
 print("---EN-DE---\n")
 
+# Load Files
 with io.open("./data_en_de/train.ende.src", "r", encoding="utf8") as ende_src:
     english = ende_src.read().splitlines()    
 with io.open("./data_en_de/train.ende.mt", "r", encoding="utf8") as ende_mt:
     german = ende_mt.read().splitlines()
 with io.open("./data_en_de/dev.ende.src", "r", encoding="utf8") as ende_src:
     english_val = ende_src.read().splitlines()
-    #print("Source: ",ende_src.readline())
 with io.open("./data_en_de/dev.ende.mt", "r", encoding="utf8") as ende_mt:
     german_val = ende_mt.read().splitlines()
 with io.open("./data_en_de/test.ende.src", "r", encoding="utf8") as ende_src:
     english_test = ende_src.read().splitlines()
-    #print("Source: ",ende_src.readline())
 with io.open("./data_en_de/test.ende.mt", "r", encoding="utf8") as ende_mt:
     german_test = ende_mt.read().splitlines()
     
 lemmatize = True
+
+# Get and save English Embeddings
+
 en_emb = Embedding('en')
 
 en_embeddings_max, en_embeddings_mean = en_emb.get_batch_embedding(
@@ -46,6 +48,7 @@ torch.save(en_test_embeddings_mean,
            './english_test_embeddings_mean.pt')
 
 
+# Get and save German Embeddings
 
 de_emb = Embedding('de')
 
