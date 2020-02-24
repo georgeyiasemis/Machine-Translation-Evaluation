@@ -14,23 +14,42 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-Give examples
+transformers
+sklearn
+scipy
+torch
+numpy
+nltk
 ```
 
-### Installing
+### Example
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+How to get embeddings for:
+```
+data = ['You can say to me.',
+        "I love machine learning It's awesome",
+        "I love coding in python",           
+        "I love building chatbots",
+        "they chat amagingly well",
+        'Hello Mr. Smith, how are you doing today?', 
+        'The weather is great, and city is awesome.', 
+        'The sky is pinkish-blue.', 
+        "You shouldn't eat cardboard",
+        'Hello beautiful world']
+```
+Create an encoder:
 
 ```
-Give the example
+import Embedding from embedding
+
+english_encoder = Embedding('en')
 ```
 
-And repeat
+Get the embeddings:
 
 ```
-until finished
+batch_size = 2
+embeddings = english_encoder.get_batch_embedding(data, batch_size = batch_size)
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
