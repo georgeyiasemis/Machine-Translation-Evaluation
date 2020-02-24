@@ -5,7 +5,7 @@ import torch
 # german one.
 # Helpful : https://huggingface.co/transformers/model_doc/bert.html
 from transformers import AutoModel, AutoTokenizer, BertTokenizer, BertModel
-#!pip install transformers
+#
 from preprocess import Preprocess
 
 
@@ -67,13 +67,13 @@ class Embedding():
             raise ValueError('{} {}'.format("Input must be one of two: 'en' or",
                              "english' for English, 'de' or 'german' for German."))
             
-    def get_batch_embedding(self, sentences, batch_size=100, lemmatize=False, remove_stop_words=False):
+    def get_batch_embedding(self, sentences, batch_size, lemmatize=False, remove_stop_words=False):
         '''
         Parameters
         ----------
         sentences : list
             DESCRIPTION. A list of raw text sentences.
-        batch_size : int, optional
+        batch_size : int
             DESCRIPTION. Sentences are split into sets of length batch_size 
                         to be fed into the model.
         lemmatize : TYPE, optional
