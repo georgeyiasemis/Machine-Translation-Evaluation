@@ -55,8 +55,12 @@ Get the embeddings:
 
 ```
 batch_size = 5
+lemmatize = True
+remove_stop_words = False
+
 embeddings_max, embeddings_mean = english_encoder.get_batch_embedding(
-                                data, batch_size = batch_size)
+                                data, batch_size = batch_size,lemmatize=lemmatize, 
+                                remove_stop_words=remove_stop_words)
 #Processing batch 1...
 #Getting embedding for batch 1...
 
@@ -77,6 +81,8 @@ embeddings_max, embeddings_mean = english_encoder.get_batch_embedding(
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **George Yiasemis** - *CID:*
+* **Christos Seas ** - *CID:*
+* **Dhruva Storz** - *CID:*
 
 
