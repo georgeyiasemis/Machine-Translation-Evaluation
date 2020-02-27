@@ -92,7 +92,7 @@ embeddings_max, embeddings_mean = english_encoder.get_batch_embedding(
 ## Authors
 
 * **George Yiasemis** - *CID:11008587*
-* **Christos Seas ** - *CID:01836251*
+* **Christos Seas** - *CID:01836251*
 * **Dhruva Storz** - *CID:01807283*
 
 
