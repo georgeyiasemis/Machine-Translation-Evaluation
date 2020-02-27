@@ -9,7 +9,7 @@ from embedding import Embedding
 
 class SVR_regression():
     
-    def __init__(self, c=0.1, epsilon=0.1, kernel='rbf', embedding_mode=3):
+    def __init__(self, c=0.1, epsilon=1, kernel='rbf', embedding_mode=2):
         # Default init attributes is the optimal hyperparameters
         self.c=c
         self.epsilon=epsilon
@@ -33,6 +33,9 @@ class SVR_regression():
             test_set = ende_mt.read().splitlines()
             self.X_test = np.array(test_set)
 
+        torch.save(german_train_scores, './train_scores.pt')
+        torch.save(german_val_scores, './val_scores.pt')
+
         #Scores
         self.train_scores = np.array(german_train_scores).astype(float)
 
@@ -49,14 +52,19 @@ class SVR_regression():
             self.X_val = np.concatenate((en_val_embeddings,de_val_embeddings), axis=1)
         elif self.embedding_mode == 2:
             # with lemmatization, dont remove stop words
-            de_embeddings_max = torch.load('./Embeddings\ with\ not\ removed\ stopwords\ -\ max\ pooling/german_embeddings_max.pt').numpy()
-            de_embeddings_mean = torch.load('./Embeddings\ with\ not\ removed\ stopwords\ -\ avg\ pooling/german_embeddings.pt').numpy()
-            de_val_embeddings_max = torch.load('./Embeddings\ with\ not\ removed\ stopwords\ -\ max\ pooling/german_val_embeddings_max.pt').numpy()
-            de_val_embeddings_mean = torch.load('./Embeddings\ with\ not\ removed\ stopwords\ -\ avg\ pooling/german_val_embeddings.pt').numpy()
-            en_embeddings_max = torch.load('./Embeddings\ with\ not\ removed\ stopwords\ -\ max\ pooling/english_train_embeddings_max.pt').numpy()
-            en_embeddings_mean = torch.load('./Embeddings\ with\ not\ removed\ stopwords\ -\ avg\ pooling/english_train_embeddings.pt').numpy()
-            en_val_embeddings_max = torch.load('./Embeddings\ with\ not\ removed\ stopwords\ -\ max\ pooling/english_val_embeddings_max.pt').numpy()
-            en_val_embeddings_mean = torch.load('./Embeddings\ with\ not\ removed\ stopwords\ -\ avg\ pooling/english_val_embeddings.pt').numpy()
+            de_embeddings_max = torch.load('./Embeddings with not removed stopwords - max pooling/german_embeddings_max.pt').numpy()
+            de_embeddings_mean = torch.load('./Embeddings with not removed stopwords -avg pooling/german_embeddings_s.pt').numpy()
+            de_val_embeddings_max = torch.load('./Embeddings with not removed stopwords - max pooling/german_val_embeddings_max.pt').numpy()
+            de_val_embeddings_mean = torch.load('./Embeddings with not removed stopwords -avg pooling/german_val_embeddings_s.pt').numpy()
+            en_embeddings_max = torch.load('./Embeddings with not removed stopwords - max pooling/english_train_embeddings_max.pt').numpy()
+            en_embeddings_mean = torch.load('./Embeddings with not removed stopwords -avg pooling/english_train_embeddings_s.pt').numpy()
+            en_val_embeddings_max = torch.load('./Embeddings with not removed stopwords - max pooling/english_val_embeddings_max.pt').numpy()
+            en_val_embeddings_mean = torch.load('./Embeddings with not removed stopwords -avg pooling/english_val_embeddings_s.pt').numpy()
+            
+            de_test_embeddings_max = torch.load('./Embeddings with not removed stopwords - max pooling/german_test_embeddings_max.pt').numpy()
+            de_test_embeddings_mean = torch.load('./Embeddings with not removed stopwords -avg pooling/german_test_embeddings_s.pt').numpy()
+            en_test_embeddings_max = torch.load('./Embeddings with not removed stopwords - max pooling/english_test_embeddings_max.pt').numpy()
+            en_test_embeddings_mean = torch.load('./Embeddings with not removed stopwords -avg pooling/english_test_embeddings_s.pt').numpy()
 
             en_train= np.concatenate((en_embeddings_max, en_embeddings_mean), axis=1) #concatenate english and german sentence vectors
             de_train= np.concatenate((de_embeddings_max, de_embeddings_mean), axis=1) #concatenate english and german sentence vectors
@@ -77,6 +85,15 @@ class SVR_regression():
             X_val = np.concatenate((X_val, x_val_prod), axis=1)
             self.X_val = X_val
 
+            en_test= np.concatenate((en_test_embeddings_max, en_test_embeddings_mean), axis=1) #concatenate english and german sentence vectors
+            de_test= np.concatenate((de_test_embeddings_max, de_test_embeddings_mean), axis=1) #concatenate english and german sentence vectors
+            x_test_abs = abs(en_test-de_test)
+            x_test_prod = np.multiply(en_test, de_test)
+            X_test = np.concatenate((en_test, de_test), axis=1)
+            X_test = np.concatenate((X_test, x_test_abs), axis=1)
+            X_test = np.concatenate((X_test, x_test_prod), axis=1)
+            self.X_test = X_test
+
         elif self.embedding_mode == 3:
             # no lemmatization, dont remove stop words
             de_embeddings_max = torch.load('./Emb_no_lem_no_stop_words_removed/german_embeddings_max.pt').numpy()
@@ -87,6 +104,11 @@ class SVR_regression():
             en_embeddings_mean = torch.load('./Emb_no_lem_no_stop_words_removed/english_train_embeddings_mean.pt').numpy()
             en_val_embeddings_max = torch.load('./Emb_no_lem_no_stop_words_removed/english_val_embeddings_max.pt').numpy()
             en_val_embeddings_mean = torch.load('./Emb_no_lem_no_stop_words_removed/english_val_embeddings_mean.pt').numpy()
+
+            de_test_embeddings_max = torch.load('./Emb_no_lem_no_stop_words_removed/german_test_embeddings_max.pt').numpy()
+            de_test_embeddings_mean = torch.load('./Emb_no_lem_no_stop_words_removed/german_test_embeddings_mean.pt').numpy()
+            en_test_embeddings_max = torch.load('./Emb_no_lem_no_stop_words_removed/english_test_embeddings_max.pt').numpy()
+            en_test_embeddings_mean = torch.load('./Emb_no_lem_no_stop_words_removed/english_test_embeddings_mean.pt').numpy()
 
             en_train= np.concatenate((en_embeddings_max, en_embeddings_mean), axis=1) #concatenate english and german sentence vectors
             de_train= np.concatenate((de_embeddings_max, de_embeddings_mean), axis=1) #concatenate english and german sentence vectors
@@ -106,24 +128,40 @@ class SVR_regression():
             X_val = np.concatenate((X_val, x_val_prod), axis=1)
             self.X_val = X_val
 
+            en_test= np.concatenate((en_test_embeddings_max, en_test_embeddings_mean), axis=1) #concatenate english and german sentence vectors
+            de_test= np.concatenate((de_test_embeddings_max, de_test_embeddings_mean), axis=1) #concatenate english and german sentence vectors
+            x_test_abs = abs(en_test-de_test)
+            x_test_prod = np.multiply(en_test, de_test)
+            X_test = np.concatenate((en_test, de_test), axis=1)
+            X_test = np.concatenate((X_test, x_test_abs), axis=1)
+            X_test = np.concatenate((X_test, x_test_prod), axis=1)
+            self.X_test = X_test
 
-    def fit(self):
+        self.X_deploy = np.concatenate((X_train, X_val))
+        self.scores_deploy = np.concatenate((self.train_scores,self.val_scores))
 
+
+    def fit(self, deploy = False):
+        #fits SVR to embedding
         self.svr = SVR(kernel = self.kernel, C=self.c, epsilon=self.epsilon, verbose=True)
-        self.svr.fit(self.X_train, self.train_scores)
+        if deploy == False: 
+            self.svr.fit(self.X_train, self.train_scores)
+        else:
+            self.svr.fit(self.X_deploy, self.scores_deploy)
 
     def predict(self, set='val'):
         #Predicts
         if set == 'val':
             predictions = self.svr.predict(self.X_val)
+            pearson = pearsonr(self.val_scores, predictions)
+            RMSE = np.sqrt(((predictions - self.val_scores) ** 2).mean())
+            
+            print(f'RMSE: {RMSE} Pearson {pearson[0]}')
+            print()
         elif set == 'test':
             predictions = self.svr.predict(self.X_test)
-        
-        pearson = pearsonr(self.val_scores, predictions)
-        RMSE = np.sqrt(((predictions - self.val_scores) ** 2).mean())
-        
-        print(f'RMSE: {RMSE} Pearson {pearson[0]}')
-        print()
+        else:
+            print("invalid prediction set. Choose val or test")
 
         return predictions
 
@@ -136,19 +174,27 @@ class SVR_regression():
                 output_file.write(f"{x}\n")
 
     def run_model(self):
-        #runs model and pickles output
-        self.fit()
-        predictions = self.predict(set='test')
+        #runs model with specified parameters and prints scores
+        self.fit(deploy=False)
+        predictions = self.predict(set='val')
+        return predictions
+
+    def save_model(self):
+        # saves deployment model (trained on train + val datasets)
+        self.fit(deploy = True)
+        predictions = self.predict(set = 'test')
 
         self.writeScores(predictions)
 
         with ZipFile("en-de_svr.zip","w") as newzip:
             newzip.write("predictions.txt")
 
+
     def gridsearch(self):
         '''
         Rudimentary implementation of grid search. Prints dictionary of pearson and RMSE scores 
         for various combinations of hyperparameters
+        Takes a very long time to run
         '''
 
         outputs = dict()
@@ -172,10 +218,11 @@ class SVR_regression():
         print(outputs)
 
 if __name__ == "__main__":
-    regressor = SVR_regression(c=0.1, epsilon=0.01, kernel='rbf')
+    regressor = SVR_regression(c=0.1, epsilon=1, kernel='rbf', embedding_mode=2)
     regressor.load_embeddings()
-    regressor.run_model()
+    #regressor.run_model()
     #regressor.gridsearch()
+    #regressor.save_model()
 
 
 
@@ -216,6 +263,21 @@ Grid Search Results, embedding_mode = 3:
                  '10/1/poly': (1.023877798689137, 0.06693690106195421),
                  '10/1/rbf': (0.967363612198251, 0.08254992819125392),
                  '10/1/sigmoid': (10.636160602296705, 0.02174298746575983)}
+
+'0.1/0.01/linear': (1.165926003464161, -0.013274858896183421), 
+'0.1/0.01/poly': (0.8780187511600916, 0.08365583398931456), 
+'0.1/0.01/rbf': (0.8750251460704005, 0.12572911708957674), 
+'0.1/0.01/sigmoid': (0.8778942070147744, 0.12158004727715237), 
+'0.1/0.1/linear': (1.1417229496769021, -0.009857101562637182), 
+'0.1/0.1/poly': (0.8760375983747811, 0.09142972570781847), 
+'0.1/0.1/rbf': (0.8742355627594809, 0.1290160329595801), 
+'0.1/0.1/sigmoid': (0.8773058792538424, 0.12090675224179011), 
+'0.1/1/linear': (1.2010611575934746, 0.08131370146065485), 
+'0.1/1/poly': (0.8953519154175986, 0.18659150204614397), 
+'0.1/1/rbf': (0.8978933360958643, 0.19674143462612229), 
+'0.1/1/sigmoid': (0.9047760824247031, 0.17572256318961335)
+
+
 '''
 
 
