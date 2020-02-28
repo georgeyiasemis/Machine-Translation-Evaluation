@@ -110,6 +110,7 @@ en_ge_product = english * german
 en_ge_abs_dif = (english - german).abs()
 
 # Tensor of Shape (7000, 768 x 8)
+# (u', v' |u' - v'|, u' * v')
 X_train = torch.cat((en_ge_cat, en_ge_product, en_ge_abs_dif), dim=1)
 
 y_train = np.array(de_train_scores).astype(float)
