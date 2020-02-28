@@ -81,14 +81,31 @@ embeddings_max, embeddings_mean = english_encoder.get_batch_embedding(
 #Embedding size is (10,768)
 
 ```
-### Load Saved Embeddings
+### Load Saved Embeddings Example
 
 ```
+import torch
+
+# Load Embeddings
+
+english_m = torch.load('./Embeddings/english_train_embeddings_max.pt')
+german_m = torch.load('./Embeddings/german_embeddings_max.pt')
+english_val_m = torch.load('./Embeddings/english_val_embeddings_max.pt')
+german_val_m = torch.load('./Embeddings/german_val_embeddings_max.pt')
+english_test_m = torch.load('./Embeddings/english_test_embeddings_max.pt')
+german_test_m = torch.load('./Embeddings/german_test_embeddings_max.pt')
+
+# Load scores/labels
+
+f_train_scores = open("./data_en_de/train.ende.scores",'r')
+de_train_scores = f_train_scores.readlines()
+f_val_scores = open("./data_en_de/dev.ende.scores",'r')
+de_val_scores = f_val_scores.readlines()
 
 ```
 ### Train a model
 
-Choose a mode from {```'SVR', 'MLP_torch', 'MLP_sckit'```} and execute ```main_py```.
+Choose a mode from {```'SVR', 'MLP_torch', 'MLP_sckit'```} and execute ```main.py```.
 You can define all the hyperparameters in the ```main()``` fucntion.
 
 ## Authors
