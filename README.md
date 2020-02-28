@@ -102,11 +102,6 @@ de_train_scores = f_train_scores.readlines()
 ```
 ## Create feature vectors
 ```
-y_train = np.array(de_train_scores).astype(float)
-# Shape (7000,)
-
-
-# Tensor of Shape (7000, 768 x 2)
 english = torch.cat((english_max, english_avg), dim=1)
 german = torch.cat((german_max, german_avg), dim=1)
 
@@ -116,6 +111,8 @@ en_ge_abs_dif = (english - german).abs()
 
 # Tensor of Shape (7000, 768 x 8)
 X_train = torch.cat((en_ge_cat, en_ge_product, en_ge_abs_dif), dim=1)
+
+y_train = np.array(de_train_scores).astype(float)
 
 ```
 
