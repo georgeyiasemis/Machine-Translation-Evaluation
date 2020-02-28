@@ -11,7 +11,7 @@ These instructions will get you a copy of the project up and running on your loc
 machine for development and testing purposes. See deployment for notes on how to deploy
 the project on a live system.
 
-#Run pipeline
+# Run pipeline
 
 Below are intructions of how to run the pipeline (we do not create the embeddings from scratch in this format. If you want to create the embeddings see the Get Embeddings format):
 * Download the whole directory 
