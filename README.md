@@ -88,21 +88,37 @@ import torch
 
 # Load Embeddings
 
-english_m = torch.load('./Embeddings/english_train_embeddings_max.pt')
-german_m = torch.load('./Embeddings/german_embeddings_max.pt')
-english_val_m = torch.load('./Embeddings/english_val_embeddings_max.pt')
-german_val_m = torch.load('./Embeddings/german_val_embeddings_max.pt')
-english_test_m = torch.load('./Embeddings/english_test_embeddings_max.pt')
-german_test_m = torch.load('./Embeddings/german_test_embeddings_max.pt')
+english_max = torch.load('./Embeddings/english_train_embeddings_max.pt')
+german_max = torch.load('./Embeddings/german_embeddings_max.pt')
+
+english_avg = torch.load('./Embeddings/english_train_embeddings_mean.pt')
+german_avg = torch.load('./Embeddings/german_embeddings_mean.pt')
 
 # Load scores/labels
 
 f_train_scores = open("./data_en_de/train.ende.scores",'r')
 de_train_scores = f_train_scores.readlines()
-f_val_scores = open("./data_en_de/dev.ende.scores",'r')
-de_val_scores = f_val_scores.readlines()
 
 ```
+## Create feature vectors
+```
+y_train = np.array(de_train_scores).astype(float)
+# Shape (7000,)
+
+
+# Tensor of Shape (7000, 768 x 2)
+english = torch.cat((english_max, english_avg), dim=1)
+german = torch.cat((german_max, german_avg), dim=1)
+
+en_ge_cat = torch.cat((english,german), dim=1)
+en_ge_product = english * german
+en_ge_abs_dif = (english - german).abs()
+
+# Tensor of Shape (7000, 768 x 8)
+X_train = torch.cat((en_ge_cat, en_ge_product, en_ge_abs_dif), dim=1)
+
+```
+
 ### Train a model
 
 Choose a mode from {```'SVR', 'MLP_torch', 'MLP_sckit'```} and execute ```main.py```.
