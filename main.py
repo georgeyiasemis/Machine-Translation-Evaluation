@@ -9,19 +9,19 @@ from scipy.stats.stats import pearsonr
 def rmse(predictions, targets):
     return np.sqrt(((predictions - targets) ** 2).mean())
 # Max pooling
-english_m = torch.load('./Embeddings/english_train_embeddings_max.pt')
-german_m = torch.load('./Embeddings/german_embeddings_max.pt')
-english_val_m = torch.load('./Embeddings/english_val_embeddings_max.pt')
-german_val_m = torch.load('./Embeddings/german_val_embeddings_max.pt')
-english_test_m = torch.load('./Embeddings/english_test_embeddings_max.pt')
-german_test_m = torch.load('./Embeddings/german_test_embeddings_max.pt')
+english_m = torch.load('./Embeddings/Embeddings_batch100/english_train_embeddings_max.pt')
+german_m = torch.load('./Embeddings/Embeddings_batch100/german_embeddings_max.pt')
+english_val_m = torch.load('./Embeddings/Embeddings_batch100/english_val_embeddings_max.pt')
+german_val_m = torch.load('./Embeddings/Embeddings_batch100/german_val_embeddings_max.pt')
+english_test_m = torch.load('./Embeddings/Embeddings_batch100/english_test_embeddings_max.pt')
+german_test_m = torch.load('./Embeddings/Embeddings_batch100/german_test_embeddings_max.pt')
 # Avg pooling
-english_avg = torch.load('./Embeddings/english_train_embeddings_mean.pt')
-german_avg = torch.load('./Embeddings/german_embeddings_mean.pt')
-english_val_avg = torch.load('./Embeddings/english_val_embeddings_mean.pt')
-german_val_avg = torch.load('./Embeddings/german_val_embeddings_mean.pt')
-english_test_avg = torch.load('./Embeddings/english_test_embeddings_mean.pt')
-german_test_avg = torch.load('./Embeddings/german_test_embeddings_mean.pt')
+english_avg = torch.load('./Embeddings/Embeddings_batch100/english_train_embeddings_mean.pt')
+german_avg = torch.load('./Embeddings/Embeddings_batch100/german_embeddings_mean.pt')
+english_val_avg = torch.load('./Embeddings/Embeddings_batch100/english_val_embeddings_mean.pt')
+german_val_avg = torch.load('./Embeddings/Embeddings_batch100/german_val_embeddings_mean.pt')
+english_test_avg = torch.load('./Embeddings/Embeddings_batch100/english_test_embeddings_mean.pt')
+german_test_avg = torch.load('./Embeddings/Embeddings_batch100/german_test_embeddings_mean.pt')
 
 # LOAD Scores
 
