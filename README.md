@@ -89,7 +89,7 @@ embeddings_max, embeddings_mean = english_encoder.get_batch_embedding(
 ### Train a model
 
 Choose a mode from {'SVR', 'MLP_torch', 'MLP_sckit'} and execute 'main_py'.
-
+You can define all the hyperparameters in the ```main()``` fucntion.
 
 ## Authors
 
