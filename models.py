@@ -4,6 +4,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from sklearn.svm import SVR
+from zipfile import ZipFile
 
 def rmse(predictions, targets):
     return np.sqrt(((predictions - targets) ** 2).mean())
@@ -69,76 +70,63 @@ class MLP(nn.Module):
 
 class SVR_regression():
     
-    def __init__(self, c=0.1, epsilon=0.1, kernel='rbf', embedding_mode=3):
-        # Default init attributes is the optimal hyperparameters
+    def __init__(self, X_train, y_train, X_val, y_val, X_test, c=0.1, epsilon=0.1, kernel='rbf'):
+        # Default init attributes are the optimal hyperparameters
+        print("Initializing...")
         self.c=c
         self.epsilon=epsilon
         self.kernel=kernel
-        self.embedding_mode=embedding_mode
-
-        self.X_train = None
-        self.X_val = None
-        self.train_scores = None
-        self.val_scores = None
-
-        self.svr = None
-
+        self.X_train = X_train
+        self.X_val = X_val
+        self.y_train = y_train
+        self.y_val = y_val
+        self.X_test = X_test
     
 
-    def fit(self):
+    def run_model(self):
+        '''
+        Runs model through entire process. From training to testing and printing validation results
+        '''
+
+        # constructs and fits svr to input embedding and scores
         print('Training...')
         self.svr = SVR(kernel = self.kernel, C=self.c, epsilon=self.epsilon, verbose=True)
-        self.svr.fit(self.X_train, self.train_scores)
+        self.svr.fit(self.X_train, self.y_train)
 
-    def predict(self, set='val'):
-        #Predicts
-        if set == 'val':
-            predictions = self.svr.predict(self.X_val)
-        elif set == 'test':
-            predictions = self.svr.predict(self.X_test)
+        # predicts scores for validation set
+        print('Predicting...')
+        predictions = self.svr.predict(self.X_val)
         
-        pearson = pearsonr(self.val_scores, predictions)
-        RMSE = np.sqrt(((predictions - self.val_scores) ** 2).mean())
+        pearson = pearsonr(self.y_val, predictions)
+        RMSE = np.sqrt(((predictions - self.y_val) ** 2).mean())
         
         print(f'RMSE: {RMSE} Pearson {pearson[0]}')
         print()
 
-        return predictions
+    def save_model(self, name, mode = 1):
+        '''
+        saves model predictions for submission to codalab
+        '''
 
-    
+        print("Saving model...")
 
-    def run_model(self):
-        #runs model and pickles output
-        self.fit()
-        predictions = self.predict(set='test')
+        # mode1 = save model trained on test only
+        if mode == 1:
+            predictions = self.svr.predict(self.X_test)
 
-        self.writeScores(predictions)
+        #mode 2 = save model trained on test + val
+        elif mode == 2:
+            X_deploy = np.concatenate((self.X_train, self.X_val), axis=0)
+            y_deploy = np.concatenate((self.y_train, self.y_val), axis=0)
+            self.svr.fit(X_deploy, y_deploy)
+            predictions = self.svr.predict(self.X_test)
 
-        with ZipFile("en-de_svr.zip","w") as newzip:
+
+        fn = "predictions.txt"
+        print("")
+        with open(fn, 'w') as output_file:
+            for idx,x in enumerate(predictions):
+                output_file.write(f"{x}\n")
+
+        with ZipFile(name+".zip","w") as newzip:
             newzip.write("predictions.txt")
-
-    def gridsearch(self):
-        '''
-        Rudimentary implementation of grid search. Prints dictionary of pearson and RMSE scores 
-        for various combinations of hyperparameters
-        '''
-
-        outputs = dict()
-
-        for C in [0.1, 1, 10]:
-            for e in [0.01, 0.1, 1]:
-                for k in ['linear', 'poly','rbf','sigmoid']:
-                    reg = SVR(kernel=k, verbose=True, C=C, epsilon=e)
-                    reg.fit(self.X_train, self.train_scores)
-                    predictions = reg.predict(self.X_val)
-                    pearson = pearsonr(self.val_scores, predictions)
-                    RMSE = np.sqrt(((predictions - self.val_scores) ** 2).mean())
-                    pearson = pearson[0]
-                    stats = (RMSE, pearson)
-                    keyname = str(C) + '/' + str(e) + '/' + k
-                    outputs[keyname] = stats
-                    print(outputs)
-                    print(f'RMSE: {RMSE} Pearson {pearson}')
-                    print()
-
-        print(outputs)  

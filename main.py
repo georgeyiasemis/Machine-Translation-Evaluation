@@ -186,14 +186,16 @@ def main(mode):
     
     elif mode == 'SVR':
         
-        model = models.SVR_regression(X_train, y_train, X_val, y_val, X_test)
-        mode.run_model()
-        
-        
+        model = models.SVR_regression(X_train, y_train,X_val, y_val, X_test) 
+        model.run_model()
+        model.save_model(name="SVR_prediction")
+
+
 
         
 if __name__ == "__main__":
-    mode = 'MLP_torch'
+    # mode = 'MLP_torch'
+    mode = 'SVR'
     main(mode=mode)
     
 
