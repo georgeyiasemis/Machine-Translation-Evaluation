@@ -14,9 +14,13 @@ the project on a live system.
 #Run pipeline
 
 Below are intructions of how to run the pipeline (we do not create the embeddings from scratch in this format. If you want to create the embeddings see the Get Embeddings format):
-Download the whole directory 
-Install the Prerequisites
-ru
+* Download the whole directory 
+* Install the Prerequisites``
+* If you want to create embeddings for a new dataset use ```get_embeddings_from_files.py```, otherwise you can work with our already saved embeddings for our current data
+* Load saved embeddings in ```main.py```
+* Set the hyperparameters in ```main.py``` and create a model
+* Run and get results
+
  
 
 ### Prerequisites
@@ -100,7 +104,7 @@ f_train_scores = open("./data_en_de/train.ende.scores",'r')
 de_train_scores = f_train_scores.readlines()
 
 ```
-#Create feature vectors
+Create feature vectors
 ```
 english = torch.cat((english_max, english_avg), dim=1)
 german = torch.cat((german_max, german_avg), dim=1)
