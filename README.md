@@ -100,7 +100,7 @@ f_train_scores = open("./data_en_de/train.ende.scores",'r')
 de_train_scores = f_train_scores.readlines()
 
 ```
-## Create feature vectors
+# Create feature vectors
 ```
 english = torch.cat((english_max, english_avg), dim=1)
 german = torch.cat((german_max, german_avg), dim=1)
