@@ -186,8 +186,8 @@ def main(mode):
     
     elif mode == 'SVR':
         
-        model = models.SVR_regression()
-        # TO DO
+        model = models.SVR_regression(X_train, y_train, X_val, y_val, X_test)
+        mode.run_model()
         
         
 
