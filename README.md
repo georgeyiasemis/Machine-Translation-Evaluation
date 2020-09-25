@@ -15,7 +15,7 @@ the project on a live system.
 
 Below are intructions of how to run the pipeline (we do not create the embeddings from scratch in this format. If you want to create the embeddings see the Get Embeddings format):
 * Download the whole directory 
-* Install the Prerequisites``
+* Install the Prerequisites
 * If you want to create embeddings for a new dataset use ```get_embeddings_from_files.py```, otherwise you can work with our already saved embeddings for our current data
 * Load saved embeddings in ```main.py```
 * Set the hyperparameters in ```main.py``` and create a model
@@ -128,8 +128,8 @@ You can define all the hyperparameters in the ```main()``` fucntion.
 
 ## Authors
 
-* **George Yiasemis** - *CID:11008587*
-* **Christos Seas** - *CID:01836251*
-* **Dhruva Storz** - *CID:01807283*
+* **George Yiasemis** 
+* **Christos Seas**  
+* **Dhruva Storz** 
 
 
